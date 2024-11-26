@@ -1,0 +1,5 @@
+typeof courseContract.grantInstructorRole;
+const courseContract = await CourseContract.attach
+const CourseContract = await ethers.getContractFactory("CourseContract");
+typeof courseContract.grantInstructorRole;
+const CourseContract = await ethers.getContractFace1Bb143E90bb3F0512");
