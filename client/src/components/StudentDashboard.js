@@ -2,9 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 
-function StudentDashboard({ studentContract, courseContract, account, refresh }) {
+function StudentDashboard({
+  studentContract,
+  courseContract,
+  account,
+  refresh,
+}) {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
-  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
     const loadEnrolledCourses = async () => {
@@ -13,12 +17,28 @@ function StudentDashboard({ studentContract, courseContract, account, refresh })
         const courseIds = await studentContract.getEnrolledCourses(account);
 
         // Fetch course details for each enrolled course
-        const coursePromises = courseIds.map(async (courseId) => {
-          const id = Number(courseId);
-          const course = await courseContract.courses(id);
+        const coursePromises = courseIds.map(async (courseIdBN) => {
+          const courseId = Number(courseIdBN);
+          const course = await courseContract.courses(courseId);
+          const instructorAddress = course.instructor;
+
+          // Try to get the instructor's name
+          let instructorName;
+          try {
+            instructorName = await studentContract.getStudentName(
+              instructorAddress
+            );
+            if (!instructorName) {
+              instructorName = "Unknown Instructor";
+            }
+          } catch {
+            instructorName = instructorAddress;
+          }
+
           return {
-            id: id,
+            id: courseId,
             name: course.name,
+            instructor: instructorName,
           };
         });
 
@@ -41,7 +61,9 @@ function StudentDashboard({ studentContract, courseContract, account, refresh })
         <ul className="list-group">
           {enrolledCourses.map((course) => (
             <li key={course.id} className="list-group-item">
-              {course.name} (ID: {course.id})
+              <strong>{course.name}</strong> (ID: {course.id})
+              <br />
+              Instructor: {course.instructor}
             </li>
           ))}
         </ul>

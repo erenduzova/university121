@@ -21,9 +21,9 @@ async function main() {
   console.log("CourseContract deployed to:", await courseContract.getAddress());
 
   // Grant INSTRUCTOR_ROLE to deployer
-  const tx = await courseContract.grantInstructorRole(deployer.address);
-  await tx.wait();
-  console.log("INSTRUCTOR_ROLE granted to deployer:", deployer.address);
+  // const tx = await courseContract.grantInstructorRole(deployer.address);
+  // await tx.wait();
+  // console.log("INSTRUCTOR_ROLE granted to deployer:", deployer.address);
 }
 
 // Handle errors

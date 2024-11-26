@@ -11,6 +11,7 @@ contract CourseContract is AccessControl  {
     struct Course {
         uint256 id;
         string name;
+        address instructor; // Added instructor field
     }
 
     mapping(uint256 => Course) public courses;
@@ -22,20 +23,21 @@ contract CourseContract is AccessControl  {
 
     function addCourse(string memory _name) public onlyRole(INSTRUCTOR_ROLE) {
         courseCount++;
-        courses[courseCount] = Course(courseCount, _name);
+        courses[courseCount] = Course(courseCount, _name, msg.sender); // Set instructor
     }
 
     function grantInstructorRole(address account) public onlyRole(ADMIN_ROLE) {
         grantRole(INSTRUCTOR_ROLE, account);
     }
 
-     // Optionally, add function to revoke instructor role
+    // Optionally, add function to revoke instructor role
     function revokeInstructorRole(address account) public onlyRole(ADMIN_ROLE) {
         revokeRole(INSTRUCTOR_ROLE, account);
     }
 
-    function getCourse(uint256 _courseId) public view returns (string memory) {
+    function getCourse(uint256 _courseId) public view returns (string memory, address) {
         require(_courseId > 0 && _courseId <= courseCount, "Course does not exist");
-        return courses[_courseId].name;
+        Course memory course = courses[_courseId];
+        return (course.name, course.instructor);
     }
 }

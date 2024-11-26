@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\eren_\\OneDrive\\Masaüstü\\Uni121\\university121\\contracts\\CourseContract.sol": {
-      "lastModificationDate": 1732541141513,
-      "contentHash": "3d9ec781f3cafc5ddef3fe6503e89268",
+      "lastModificationDate": 1732653898053,
+      "contentHash": "cbf91346cc3c56866c5b4c22934542bf",
       "sourceName": "contracts/CourseContract.sol",
       "solcConfig": {
         "version": "0.8.27",
@@ -40,8 +40,8 @@
       ]
     },
     "C:\\Users\\eren_\\OneDrive\\Masaüstü\\Uni121\\university121\\contracts\\StudentContract.sol": {
-      "lastModificationDate": 1732541178165,
-      "contentHash": "afbcf72c2df9f171da56142f54dfc383",
+      "lastModificationDate": 1732653888639,
+      "contentHash": "d287445627e57bbfe6783e6790dc90bf",
       "sourceName": "contracts/StudentContract.sol",
       "solcConfig": {
         "version": "0.8.27",

@@ -36,4 +36,14 @@ contract StudentContract is AccessControl {
     function getEnrolledCourses(address _student) public view returns (uint256[] memory) {
         return students[_student].enrolledCourses;
     }
+
+    // Added isRegistered function
+    function isRegistered(address _student) public view returns (bool) {
+        return bytes(students[_student].name).length != 0;
+    }
+
+    // Optional: Get student name
+    function getStudentName(address _student) public view returns (string memory) {
+        return students[_student].name;
+    }
 }
