@@ -1,0 +1,62 @@
+/* Features.css */
+
+.feature-section {
+  padding: 4rem 1rem;
+  background-color: #1b1f2a;
+  color: #d1d9e6;
+}
+
+.custom-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.features-title {
+  text-align: center;
+  color: #3399ff;
+  font-size: 2.4rem;
+  margin-bottom: 3rem;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.feature-image-container {
+  flex: 1;
+  max-width: 300px;
+}
+
+.feature-image {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.feature-text {
+  flex: 2;
+}
+
+.feature-text h3 {
+  font-size: 1.8rem;
+  color: #3399ff;
+}
+
+.feature-text p {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .feature {
+    flex-direction: column;
+  }
+
+  .feature-image-container {
+    max-width: 100%;
+  }
+}

@@ -12,19 +12,22 @@ import {
 } from "react-router-dom";
 
 import HomePage from "./pages/HomePage/HomePage";
-import DashboardPage from "./pages/DashboardPage/DashboardPage";
-
-import StudentRegistration from "./components/StudentRegistration";
+import RegistrationPage from "./pages/RegistrationPage/RegistrationPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import CoursesPage from "./pages/CoursesPage/CoursesPage";
+import EnrolledCoursesPage from "./pages/EnrolledCoursesPage/EnrolledCoursesPage";
+import CourseDetailsPage from "./pages/CourseDetailsPage/CourseDetailsPage";
+import AddCoursePage from "./pages/AddCoursePage/AddCoursePage";
+import GrantInstructorPage from "./pages/GrantInstructorPage/GrantInstructorPage";
 
 function App() {
   const [studentContract, setStudentContract] = useState(null);
   const [courseContract, setCourseContract] = useState(null);
   const [account, setAccount] = useState(null);
-  const [refreshEnrollment, setRefreshEnrollment] = useState(false);
   const [isInstructor, setIsInstructor] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [refreshCourses, setRefreshCourses] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Check if MetaMask is connected
   useEffect(() => {
@@ -40,13 +43,16 @@ function App() {
             await connectContracts(accounts[0]);
           } else {
             setAccount(null);
+            setLoading(false);
           }
         } catch (error) {
           console.error("Error checking accounts:", error);
           setAccount(null);
+          setLoading(false);
         }
       } else {
         alert("Please install MetaMask!");
+        setLoading(false);
       }
     };
 
@@ -62,10 +68,10 @@ function App() {
         setAccount(accountAddress);
 
         // Contract addresses (from deployment)
-        const studentContractAddress =
-          "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"; // Update with your actual address
         const courseContractAddress =
-          "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"; // Update with your actual address
+          "0x5FbDB2315678afecb367f032d93F642f64180aa3"; // Update with actual address
+        const studentContractAddress =
+          "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // Update with actual address
 
         // Create contract instances
         const studentContract = new ethers.Contract(
@@ -84,13 +90,15 @@ function App() {
       } catch (error) {
         console.error("Error connecting to contracts:", error);
         setAccount(null);
+        setLoading(false);
       }
     } else {
       alert("Please install MetaMask!");
+      setLoading(false);
     }
   };
 
-  // Function to handle MetaMask connection when user clicks "Connect MetaMask"
+  // Function to handle MetaMask connection when user clicks "MetaMask'a Bağlan"
   const handleConnectMetaMask = async () => {
     if (window.ethereum) {
       try {
@@ -102,13 +110,16 @@ function App() {
           await connectContracts(accounts[0]);
         } else {
           setAccount(null);
+          setLoading(false);
         }
       } catch (error) {
         console.error("Error connecting to MetaMask:", error);
         setAccount(null);
+        setLoading(false);
       }
     } else {
       alert("Please install MetaMask!");
+      setLoading(false);
     }
   };
 
@@ -118,7 +129,9 @@ function App() {
       if (!courseContract || !account) return;
 
       try {
-        const INSTRUCTOR_ROLE = ethers.id("INSTRUCTOR_ROLE");
+        const INSTRUCTOR_ROLE = ethers.keccak256(
+          ethers.toUtf8Bytes("INSTRUCTOR_ROLE")
+        );
         const ADMIN_ROLE = await courseContract.DEFAULT_ADMIN_ROLE();
 
         const hasInstructorRole = await courseContract.hasRole(
@@ -144,7 +157,10 @@ function App() {
   // Check if the user is registered
   useEffect(() => {
     const checkRegistration = async () => {
-      if (!studentContract || !account) return;
+      if (!studentContract || !account) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const registered = await studentContract.isRegistered(account);
@@ -152,6 +168,8 @@ function App() {
         setIsRegistered(registered);
       } catch (error) {
         console.error("Error checking registration:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -166,11 +184,19 @@ function App() {
       window.ethereum.on("accountsChanged", async (accounts) => {
         if (accounts.length > 0) {
           setAccount(accounts[0]);
+          setLoading(true);
+          setIsRegistered(false);
+          setIsInstructor(false);
+          setIsAdmin(false);
           await connectContracts(accounts[0]);
         } else {
           setAccount(null);
           setStudentContract(null);
           setCourseContract(null);
+          setIsRegistered(false);
+          setIsInstructor(false);
+          setIsAdmin(false);
+          setLoading(false);
         }
       });
 
@@ -183,36 +209,120 @@ function App() {
   return (
     <Router>
       <div className="container">
-        {!account ? (
-          // Render the HomePage component with onConnect prop
+        {loading ? (
+          <p>Yükleniyor...</p>
+        ) : !account || !studentContract || !courseContract ? (
+          // If not connected or contracts not loaded, render HomePage
           <HomePage onConnect={handleConnectMetaMask} />
-        ) : !studentContract || !courseContract ? (
-          <p>Loading contracts...</p>
-        ) : !isRegistered ? (
-          <StudentRegistration
-            studentContract={studentContract}
-            onRegister={() => setIsRegistered(true)}
-          />
         ) : (
+          // Contracts are loaded and account is connected
           <Routes>
-            <Route
-              path="/"
-              element={
-                <DashboardPage
-                  isInstructor={isInstructor}
-                  isAdmin={isAdmin}
-                  courseContract={courseContract}
-                  studentContract={studentContract}
-                  account={account}
-                  refreshCourses={refreshCourses}
-                  setRefreshCourses={setRefreshCourses}
-                  refreshEnrollment={refreshEnrollment}
-                  setRefreshEnrollment={setRefreshEnrollment}
+            {/* Registration Route */}
+            {!isRegistered && (
+              <>
+                <Route
+                  path="/register"
+                  element={
+                    <RegistrationPage
+                      studentContract={studentContract}
+                      account={account}
+                      onRegister={() => setIsRegistered(true)}
+                    />
+                  }
                 />
-              }
-            />
-            {/* Add more routes here if needed */}
-            <Route path="*" element={<Navigate to="/" />} />
+                {/* Redirect any other route to /register */}
+                <Route path="*" element={<Navigate to="/register" replace />} />
+              </>
+            )}
+
+            {/* Authenticated Routes */}
+            {isRegistered && (
+              <>
+                {/* Default Route */}
+                <Route path="/" element={<Navigate to="/courses" replace />} />
+                {/* Profile Route */}
+                <Route
+                  path="/profile"
+                  element={
+                    <ProfilePage
+                      account={account}
+                      studentContract={studentContract}
+                      isInstructor={isInstructor}
+                      isAdmin={isAdmin}
+                    />
+                  }
+                />
+                {/* Courses Route */}
+                <Route
+                  path="/courses"
+                  element={
+                    <CoursesPage
+                      courseContract={courseContract}
+                      studentContract={studentContract}
+                      account={account}
+                      isInstructor={isInstructor}
+                      isAdmin={isAdmin}
+                    />
+                  }
+                />
+                {/* Enrolled Courses Route */}
+                <Route
+                  path="/enrolled-courses"
+                  element={
+                    <EnrolledCoursesPage
+                      courseContract={courseContract}
+                      studentContract={studentContract}
+                      account={account}
+                      isInstructor={isInstructor}
+                      isAdmin={isAdmin}
+                    />
+                  }
+                />
+                {/* Course Details Route */}
+                <Route
+                  path="/courses/:id"
+                  element={
+                    <CourseDetailsPage
+                      courseContract={courseContract}
+                      studentContract={studentContract}
+                      account={account}
+                      isInstructor={isInstructor}
+                      isAdmin={isAdmin}
+                    />
+                  }
+                />
+                {isInstructor && (
+                  <Route
+                    path="/add-course"
+                    element={
+                      <AddCoursePage
+                        courseContract={courseContract}
+                        studentContract={studentContract}
+                        account={account}
+                        isInstructor={isInstructor}
+                        isAdmin={isAdmin}
+                      />
+                    }
+                  />
+                )}
+                {isAdmin && (
+                  <Route
+                    path="/grant-instructor"
+                    element={
+                      <GrantInstructorPage
+                        courseContract={courseContract}
+                        studentContract={studentContract}
+                        account={account}
+                        isInstructor={isInstructor}
+                        isAdmin={isAdmin}
+                      />
+                    }
+                  />
+                )}
+                {/* Redirect unknown routes to /courses */}
+                <Route path="*" element={<Navigate to="/courses" replace />} />
+              </>
+            )}
           </Routes>
         )}
       </div>

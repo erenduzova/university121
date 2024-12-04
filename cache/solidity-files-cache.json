@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\eren_\\OneDrive\\Masaüstü\\Uni121\\university121\\contracts\\CourseContract.sol": {
-      "lastModificationDate": 1732653898053,
-      "contentHash": "cbf91346cc3c56866c5b4c22934542bf",
+      "lastModificationDate": 1733261590600,
+      "contentHash": "c3ff5d243356341739f0f47bb577539b",
       "sourceName": "contracts/CourseContract.sol",
       "solcConfig": {
         "version": "0.8.27",
@@ -40,8 +40,8 @@
       ]
     },
     "C:\\Users\\eren_\\OneDrive\\Masaüstü\\Uni121\\university121\\contracts\\StudentContract.sol": {
-      "lastModificationDate": 1732653888639,
-      "contentHash": "d287445627e57bbfe6783e6790dc90bf",
+      "lastModificationDate": 1733262192021,
+      "contentHash": "b44e4ac4d0a51f47d18e431151e41044",
       "sourceName": "contracts/StudentContract.sol",
       "solcConfig": {
         "version": "0.8.27",
@@ -68,7 +68,8 @@
         }
       },
       "imports": [
-        "@openzeppelin/contracts/access/AccessControl.sol"
+        "@openzeppelin/contracts/access/AccessControl.sol",
+        "./CourseContract.sol"
       ],
       "versionPragmas": [
         "^0.8.27"

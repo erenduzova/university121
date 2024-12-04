@@ -1,0 +1,21 @@
+.courses-page {
+  display: flex;
+  color: #d1d9e6;
+}
+
+.courses-content {
+  flex: 1;
+  padding: 2rem;
+  margin-left: 250px;
+}
+
+.courses-content h1 {
+  margin-bottom: 2rem;
+  color: #3399ff;
+}
+
+.courses-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}

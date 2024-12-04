@@ -1,32 +1,37 @@
 const hre = require("hardhat");
 
 async function main() {
-  const [deployer] = await ethers.getSigners();
+  // Get the signer (deployer)
+  const [deployer] = await hre.ethers.getSigners();
 
-  // Deploy StudentContract
-  const StudentContract = await hre.ethers.getContractFactory(
-    "StudentContract"
+  // Get the contract factories
+  const CourseContractFactory = await hre.ethers.getContractFactory(
+    "CourseContract"
   );
-  const studentContract = await StudentContract.deploy();
-  await studentContract.waitForDeployment();
-  console.log(
-    "StudentContract deployed to:",
-    await studentContract.getAddress()
+  const StudentContractFactory = await hre.ethers.getContractFactory(
+    "StudentContract"
   );
 
   // Deploy CourseContract
-  const CourseContract = await hre.ethers.getContractFactory("CourseContract");
-  const courseContract = await CourseContract.deploy();
-  await courseContract.waitForDeployment();
-  console.log("CourseContract deployed to:", await courseContract.getAddress());
+  const courseContract = await CourseContractFactory.deploy();
+  await courseContract.waitForDeployment(); // Ensure deployment is complete
+  const courseContractAddress = courseContract.target;
+  console.log("CourseContract deployed to:", courseContractAddress);
 
-  // Grant INSTRUCTOR_ROLE to deployer
-  // const tx = await courseContract.grantInstructorRole(deployer.address);
-  // await tx.wait();
-  // console.log("INSTRUCTOR_ROLE granted to deployer:", deployer.address);
+  // Deploy StudentContract
+  const studentContract = await StudentContractFactory.deploy();
+  await studentContract.waitForDeployment(); // Ensure deployment is complete
+  const studentContractAddress = studentContract.target;
+  console.log("StudentContract deployed to:", studentContractAddress);
+
+  // Set the CourseContract address in StudentContract
+  const tx = await studentContract.setCourseContractAddress(
+    courseContractAddress
+  );
+  await tx.wait();
+  console.log("CourseContract address set in StudentContract");
 }
 
-// Handle errors
 main()
   .then(() => process.exit(0))
   .catch((error) => {

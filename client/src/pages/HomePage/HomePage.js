@@ -1,15 +1,22 @@
-// src/components/HomePage.js
-
 import React from "react";
+import Navbar from "../../components/Navbar/Navbar";
+import Slider from "../../components/Slider/Slider";
+import About from "../../components/About/About";
+import Features from "../../components/Features/Features";
+import Footer from "../../components/Footer/Footer";
 
-function HomePage({ onConnect }) {
+function HomePage({ onConnect, account, isRegistered }) {
   return (
-    <div className="my-4">
-      <h2>Welcome to University 121</h2>
-      <p>Please connect your MetaMask wallet to access the application.</p>
-      <button className="btn btn-primary" onClick={onConnect}>
-        Connect MetaMask
-      </button>
+    <div>
+      <Navbar
+        onConnect={onConnect}
+        account={account}
+        isRegistered={isRegistered}
+      />
+      <Slider />
+      <About />
+      <Features />
+      <Footer />
     </div>
   );
 }

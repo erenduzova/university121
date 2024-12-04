@@ -1,0 +1,28 @@
+/* src/components/AddCourse/AddCourse.css */
+
+.add-course-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.add-course-form .form-group {
+  margin-bottom: 15px;
+}
+
+.add-course-form .form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.add-course-form .btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+}
+
+.add-course-form .message {
+  margin-top: 15px;
+  font-size: 16px;
+  color: green;
+}

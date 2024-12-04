@@ -1,0 +1,23 @@
+.grant-instructor-page {
+  display: flex;
+  flex: 1;
+  padding: 2rem;
+  margin-left: 250px;
+  background-color: #414256;
+  min-height: 100vh;
+}
+
+.grant-instructor-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.grant-instructor-content {
+  min-width: 500px;
+}
+
+.grant-instructor-content h1 {
+  color: #3399ff;
+  margin-bottom: 1rem;
+}

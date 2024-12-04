@@ -1,0 +1,21 @@
+/* About.css */
+
+.about {
+  background-color: #283048;
+  color: #ffffff;
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.about h2 {
+  color: #3399ff;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.about p {
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
